@@ -10,6 +10,10 @@ namespace RecruitmentTask
         static List<float> parsedNumbers = new List<float>();
         static TextReader inputStream = Console.In;
         static String textInput = null;
+
+        static float minDifference = float.MaxValue;
+        static float middleValue = 0;
+        static float minDifferenceNumber = 0;
         static void Main(string[] args)
         {
             if (!Console.IsInputRedirected)
@@ -20,10 +24,9 @@ namespace RecruitmentTask
 
             ReadFileFromStandardInput();
             ParseNumbers();
-            foreach (var item in parsedNumbers)
-            {
-                System.Console.WriteLine(item);
-            }
+            FindNumberWithMinDifference();
+
+            System.Console.WriteLine("Result: {0}", minDifferenceNumber);
         }
 
         private static void ReadFileFromStandardInput()
@@ -63,11 +66,29 @@ namespace RecruitmentTask
             }
         }
 
-        // private static int FindClosestElement()
-        // {
-        //     //int[] toSum = parsedNumbers.ToArray();
-        //     float sum = parsedNumbers.Aggregate((a,b) => a + b);
-        //     float toCheckValue = 0.25 * sum;
-        // }
+        private static void FindNumberWithMinDifference()
+        {
+            float sum = parsedNumbers.Aggregate((a,b) => a + b);
+            middleValue = (float) 0.25 * sum;
+            TryAllNumbers();
+        }
+
+        private static void TryAllNumbers()
+        {
+            foreach (var number in parsedNumbers)
+            {
+                TryNumber(number);
+            }
+        }
+
+        private static void TryNumber(float number)
+        {
+            float difference = Math.Abs(middleValue - number);
+            if(difference < minDifference)
+            {
+                minDifference = difference;
+                minDifferenceNumber = number;
+            }
+        }
     }
 }
